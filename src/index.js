@@ -9,11 +9,19 @@ const JWTHeader = {
   typ: "JWT",
 };
 
+// const JWTPayload = {
+//   sub: "090999",
+//   name: "einzeL",
+//   admin: true,
+// };
+// const dateTime = new Date();
 const JWTPayload = {
-  sub: "090999",
+  sub: new Date(),
   name: "einzeL",
   admin: true,
 };
+
+console.log(JWTPayload);
 
 const base64urlEncode = (obj) =>
   Buffer.from(JSON.stringify(obj))
