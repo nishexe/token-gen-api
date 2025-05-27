@@ -30,20 +30,24 @@ function generateToken() {
   const JWT = `${headerEncoded}.${payloadEncoded}.${signatureEncoded}`;
   return JWT;
 }
+
 const getAccessTokenRouter = express.Router();
 
 getAccessTokenRouter.route("/").post(async (req, res) => {
   try {
-    const req_client_id = req.body.split("=")[1].trim();
-    // console.log(`${req_client_id}space`);
-    // console.log(`${process.env.CLIENT_ID}space`);
-    if (req_client_id === process.env.CLIENT_ID) {
-      return res.status(202).send(generateToken());
+    if (!req.body || typeof req.body === "undefined") {
+      return res.status(417).send(`client_id is required in the body`);
     } else {
-      return res.status(401).send(`Unauthorized!`);
+      const req_client_id = req.body.split("=")[1].trim();
+      if (req_client_id === process.env.CLIENT_ID) {
+        return res.status(202).send(generateToken());
+      } else {
+        return res.status(401).send(`Unauthorized!`);
+      }
     }
   } catch (error) {
-    return res.status(500).send(error);
+    // console.log(error);
+    return res.status(500);
   }
 });
 
